@@ -6,12 +6,12 @@ Theme for professional publication-quality figures.
 
 {-# LANGUAGE OverloadedStrings #-}
 
-module Theme
+module Graphics.Vega.VegaLite.Theme
   ( theme
   ) where
 
 -- Remote
-import Graphics.Vega.VegaLite.Theme
+import Graphics.Vega.VegaLite
 import qualified Data.Text as T
 
 -- Local

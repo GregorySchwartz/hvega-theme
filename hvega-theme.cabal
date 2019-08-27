@@ -15,7 +15,7 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Theme
+  exposed-modules:     Graphics.Vega.VegaLite.Theme
   build-depends:       base >= 4.7 && < 5
                      , hvega
                      , text
