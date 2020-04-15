@@ -35,10 +35,10 @@ defaultConfig = Config { configFontSize = Nothing
                        , configWidth = Nothing
                        }
 
-theme :: Config -> [LabelledSpec] -> (VLProperty, VLSpec)
+theme :: Config -> [ConfigureSpec] -> (VLProperty, VLSpec)
 theme c = configure
-        . configuration (View $ viewConfig c)
-        . configuration (Legend $ legendConfig c)
+        . configuration (ViewStyle $ viewConfig c)
+        . configuration (LegendStyle $ legendConfig c)
         . configuration (TitleStyle $ titleConfig c)
         . configuration (Axis $ axisConfig c)
         . configuration (AxisX $ axisConfig c)
@@ -46,8 +46,8 @@ theme c = configure
 
 viewConfig :: Config -> [ViewConfig]
 viewConfig c = catMaybes
-                 [ fmap ViewHeight (configHeight c)  -- 80 for publishing
-                 , fmap ViewWidth (configWidth c)  -- 100 for publishing
+                 [ fmap ViewContinuousHeight (configHeight c)  -- 80 for publishing
+                 , fmap ViewContinuousWidth (configWidth c)  -- 100 for publishing
                  , Just $ ViewStrokeOpacity 0  -- Despine
                  ]
 
