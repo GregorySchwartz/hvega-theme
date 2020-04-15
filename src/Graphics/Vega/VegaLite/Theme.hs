@@ -43,7 +43,7 @@ theme c = configure
         . configuration (ViewStyle $ viewConfig c)
         . configuration (LegendStyle $ legendConfig c)
         . configuration (TitleStyle $ titleConfig c)
-        . configuration (Axis $ axisConfig c)
+        . configuration (Axis $ axisConfig (c { configLabelAngle = Nothing }))  -- Never change rotation for y axis.
         . configuration (AxisX $ axisConfig c)
         . configuration (AxisY $ axisConfig (c { configLabelAngle = Nothing}))  -- Never change rotation for y axis.
 
