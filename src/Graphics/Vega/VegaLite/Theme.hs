@@ -45,7 +45,7 @@ theme c = configure
         . configuration (TitleStyle $ titleConfig c)
         . configuration (Axis $ axisConfig c)
         . configuration (AxisX $ axisConfig c)
-        . configuration (AxisY $ axisConfig c)
+        . configuration (AxisY $ axisConfig (c { configLabelAngle = Nothing}))  -- Never change rotation for y axis.
 
 viewConfig :: Config -> [ViewConfig]
 viewConfig c = catMaybes
