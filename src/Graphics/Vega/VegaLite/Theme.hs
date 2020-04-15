@@ -12,26 +12,27 @@ module Graphics.Vega.VegaLite.Theme
   ) where
 
 -- Remote
+import Data.Maybe (catMaybes)
 import Graphics.Vega.VegaLite
 import qualified Data.Text as T
 
 -- Local
 
-data Config = Config { configFontSize :: Double
+data Config = Config { configFontSize :: Maybe Double
                      , configFont :: T.Text
                      , configLabelFont :: T.Text
                      , configAxisColor :: T.Text
-                     , configHeight :: Double
-                     , configWidth :: Double
+                     , configHeight :: Maybe Double
+                     , configWidth :: Maybe Double
                      }
 
 defaultConfig :: Config
-defaultConfig = Config { configFontSize = 12
+defaultConfig = Config { configFontSize = Nothing
                        , configFont = "Arial"
                        , configLabelFont = "Arial"
                        , configAxisColor = "#000000"
-                       , configHeight = 300
-                       , configWidth = 400
+                       , configHeight = Nothing
+                       , configWidth = Nothing
                        }
 
 theme :: Config -> [LabelledSpec] -> (VLProperty, VLSpec)
@@ -44,31 +45,35 @@ theme c = configure
         . configuration (AxisY $ axisConfig c)
 
 viewConfig :: Config -> [ViewConfig]
-viewConfig c = [ ViewHeight (configHeight c)  -- 80 for publishing
-               , ViewWidth (configWidth c)  -- 100 for publishing
-               , StrokeOpacity 0  -- Despine
-               ]
-
-legendConfig :: Config -> [LegendConfig]
-legendConfig c = [ LeLabelFontSize (configFontSize c)
-                 , LeTitleFontSize (configFontSize c)
+viewConfig c = catMaybes
+                 [ fmap ViewHeight (configHeight c)  -- 80 for publishing
+                 , fmap ViewWidth (configWidth c)  -- 100 for publishing
+                 , Just $ ViewStrokeOpacity 0  -- Despine
                  ]
 
+legendConfig :: Config -> [LegendConfig]
+legendConfig c = catMaybes
+                   [ fmap LeLabelFontSize (configFontSize c)
+                   , fmap LeTitleFontSize (configFontSize c)
+                   ]
+
 titleConfig :: Config -> [TitleConfig]
-titleConfig c = [ TFontSize (configFontSize c)
-                , TFont (configFont c)
-                , TColor "#000000"
-                , TFontWeight Normal
-                ]
+titleConfig c = catMaybes
+                  [ fmap TFontSize (configFontSize c)
+                  , Just $ TFont (configFont c)
+                  , Just $ TColor "#000000"
+                  , Just $ TFontWeight Normal
+                  ]
 
 axisConfig :: Config -> [AxisConfig]
-axisConfig c = [ Grid False
-               , DomainColor "#000000"
-               , LabelFont (configLabelFont c)
-               , LabelFontSize (configFontSize c)
-               , LabelAngle 0
-               , TickColor (configAxisColor c)
-               , TitleFont (configFont c)
-               , TitleFontSize (configFontSize c)
-               , TitleFontWeight Normal
-               ]
+axisConfig c = catMaybes
+                 [ Just $ Grid False
+                 , Just $ DomainColor "#000000"
+                 , Just $ LabelFont (configLabelFont c)
+                 , fmap LabelFontSize (configFontSize c)
+                 , Just $ LabelAngle 0
+                 , Just $ TickColor (configAxisColor c)
+                 , Just $ TitleFont (configFont c)
+                 , fmap TitleFontSize (configFontSize c)
+                 , Just $ TitleFontWeight Normal
+                 ]
