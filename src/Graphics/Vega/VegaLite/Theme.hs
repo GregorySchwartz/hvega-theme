@@ -8,6 +8,7 @@ Theme for professional publication-quality figures.
 
 module Graphics.Vega.VegaLite.Theme
   ( theme
+  , defaultConfig
   ) where
 
 -- Remote
