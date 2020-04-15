@@ -24,6 +24,7 @@ data Config = Config { configFontSize :: Maybe Double
                      , configAxisColor :: T.Text
                      , configHeight :: Maybe Double
                      , configWidth :: Maybe Double
+                     , configLabelAngle :: Maybe Double
                      }
 
 defaultConfig :: Config
@@ -33,6 +34,7 @@ defaultConfig = Config { configFontSize = Nothing
                        , configAxisColor = "#000000"
                        , configHeight = Nothing
                        , configWidth = Nothing
+                       , configLabelAngle = Nothing
                        }
 
 theme :: Config -> [ConfigureSpec] -> (VLProperty, VLSpec)
@@ -46,21 +48,21 @@ theme c = configure
 
 viewConfig :: Config -> [ViewConfig]
 viewConfig c = catMaybes
-                 [ fmap ViewContinuousHeight (configHeight c)  -- 80 for publishing
-                 , fmap ViewContinuousWidth (configWidth c)  -- 100 for publishing
+                 [ fmap ViewContinuousHeight $ configHeight c  -- 80 for publishing
+                 , fmap ViewContinuousWidth $ configWidth c  -- 100 for publishing
                  , Just $ ViewStrokeOpacity 0  -- Despine
                  ]
 
 legendConfig :: Config -> [LegendConfig]
 legendConfig c = catMaybes
-                   [ fmap LeLabelFontSize (configFontSize c)
-                   , fmap LeTitleFontSize (configFontSize c)
+                   [ fmap LeLabelFontSize $ configFontSize c
+                   , fmap LeTitleFontSize $ configFontSize c
                    ]
 
 titleConfig :: Config -> [TitleConfig]
 titleConfig c = catMaybes
-                  [ fmap TFontSize (configFontSize c)
-                  , Just $ TFont (configFont c)
+                  [ fmap TFontSize $ configFontSize c
+                  , Just $ TFont $ configFont c
                   , Just $ TColor "#000000"
                   , Just $ TFontWeight Normal
                   ]
@@ -69,11 +71,11 @@ axisConfig :: Config -> [AxisConfig]
 axisConfig c = catMaybes
                  [ Just $ Grid False
                  , Just $ DomainColor "#000000"
-                 , Just $ LabelFont (configLabelFont c)
-                 , fmap LabelFontSize (configFontSize c)
-                 , Just $ LabelAngle 0
-                 , Just $ TickColor (configAxisColor c)
-                 , Just $ TitleFont (configFont c)
-                 , fmap TitleFontSize (configFontSize c)
+                 , Just $ LabelFont $ configLabelFont c
+                 , fmap LabelFontSize $ configFontSize c
+                 , fmap LabelAngle $ configLabelAngle c
+                 , Just $ TickColor $ configAxisColor c
+                 , Just $ TitleFont $ configFont c
+                 , fmap TitleFontSize $ configFontSize c
                  , Just $ TitleFontWeight Normal
                  ]
