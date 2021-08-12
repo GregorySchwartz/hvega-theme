@@ -20,6 +20,7 @@ import qualified Data.Text as T
 -- Local
 
 data Config = Config { configFontSize :: Maybe Double
+                     , configTitleFontSize :: Maybe Double
                      , configFont :: T.Text
                      , configLabelFont :: T.Text
                      , configAxisColor :: T.Text
@@ -30,6 +31,7 @@ data Config = Config { configFontSize :: Maybe Double
 
 defaultConfig :: Config
 defaultConfig = Config { configFontSize = Nothing
+                       , configTitleFontSize = Nothing
                        , configFont = "Arial"
                        , configLabelFont = "Arial"
                        , configAxisColor = "#000000"
@@ -57,12 +59,12 @@ viewConfig c = catMaybes
 legendConfig :: Config -> [LegendConfig]
 legendConfig c = catMaybes
                    [ fmap LeLabelFontSize $ configFontSize c
-                   , fmap LeTitleFontSize $ configFontSize c
+                   , fmap LeTitleFontSize $ configTitleFontSize c
                    ]
 
 titleConfig :: Config -> [TitleConfig]
 titleConfig c = catMaybes
-                  [ fmap TFontSize $ configFontSize c
+                  [ fmap TFontSize $ configTitleFontSize c
                   , Just $ TFont $ configFont c
                   , Just $ TColor "#000000"
                   , Just $ TFontWeight Normal
@@ -77,6 +79,6 @@ axisConfig c = catMaybes
                  , fmap LabelAngle $ configLabelAngle c
                  , Just $ TickColor $ configAxisColor c
                  , Just $ TitleFont $ configFont c
-                 , fmap TitleFontSize $ configFontSize c
+                 , fmap TitleFontSize $ configTitleFontSize c
                  , Just $ TitleFontWeight Normal
                  ]
